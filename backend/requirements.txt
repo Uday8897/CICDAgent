@@ -1,0 +1,14 @@
+# requirements.txt
+langgraph
+pygithub
+langchain-groq
+langchain-core
+python-dotenv
+apscheduler
+requests
+PyYAML
+fastapi
+uvicorn
+pymongo
+motor
+pydantic
