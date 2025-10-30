@@ -1,12 +1,11 @@
-# main.py
 import asyncio
 import sys
 import os
 import json
-import uuid
+import logging
 from datetime import datetime
 from typing import List, Dict, Optional, Any
-from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks
+from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, ConfigDict
 from pydantic.functional_validators import BeforeValidator
@@ -22,6 +21,16 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from src.agent.graph import MonitoringAgent
 from src.utils.config import Config
 
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(),
+        logging.FileHandler('app.log')
+    ]
+)
+logger = logging.getLogger(__name__)
+
 MONGODB_URL = os.getenv("MONGODB_URL", "mongodb://localhost:27017")
 DATABASE_NAME = "github_monitor"
 
@@ -30,7 +39,6 @@ db = mongo_client[DATABASE_NAME]
 
 async_client = motor.motor_asyncio.AsyncIOMotorClient(MONGODB_URL)
 async_db = async_client[DATABASE_NAME]
-
 
 repositories_collection = db.repositories
 monitoring_results_collection = db.monitoring_results
@@ -62,7 +70,7 @@ class MonitoringResult(BaseModel):
     id: Optional[PyObjectId] = Field(alias="_id", default=None)
     repo_id: PyObjectId
     timestamp: datetime = Field(default_factory=datetime.now)
-    status: str  # success, failure, error
+    status: str
     failed_run_id: Optional[int] = None
     failed_job_id: Optional[int] = None
     root_cause: Optional[str] = None
@@ -82,9 +90,6 @@ class MonitoringResult(BaseModel):
 class AddRepoRequest(BaseModel):
     url: str
     access_token: str
-
-class UpdateRepoSettings(BaseModel):
-    is_active: bool
 
 class UpdateRepoRequest(BaseModel):
     url: Optional[str] = None
@@ -212,29 +217,28 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],  # Vite default ports
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 def monitor_repository_sync(repo_id: str):
-    """Synchronous version for background tasks"""
     try:
         if not ObjectId.is_valid(repo_id):
-            print(f"Invalid repository ID: {repo_id}")
+            logger.error(f"Invalid repository ID: {repo_id}")
             return
             
         repo = repositories_collection.find_one({"_id": ObjectId(repo_id)})
         if not repo:
-            print(f"Repository not found: {repo_id}")
+            logger.error(f"Repository not found: {repo_id}")
             return
             
         if not repo.get("is_active", True):
-            print(f"Skipping inactive repository: {repo['name']} (ID: {repo_id})")
+            logger.info(f"Skipping inactive repository: {repo['name']}")
             return
 
-        print(f"Monitoring active repository: {repo['name']} - {repo['url']}")
+        logger.info(f"Starting monitoring for repository: {repo['name']}")
         
         original_token = os.getenv("GITHUB_TOKEN")
         os.environ["GITHUB_TOKEN"] = repo["access_token"]
@@ -243,9 +247,10 @@ def monitor_repository_sync(repo_id: str):
             agent = MonitoringAgent()
             result = agent.run(repo["url"])
             
-            print(f"****Agent returned: {type(result)} - {result}***")
+            logger.info(f"Agent execution completed for {repo['name']}")
+            
             if result is None:
-                print(f"Agent returned None for {repo['name']}, creating success result")
+                logger.warning(f"Agent returned None for {repo['name']}, creating default result")
                 result = {
                     "status": "success",
                     "analysis": {
@@ -254,7 +259,7 @@ def monitor_repository_sync(repo_id: str):
                     }
                 }
             elif not isinstance(result, dict):
-                print(f"Agent returned non-dict type: {type(result)}, creating success result")
+                logger.warning(f"Agent returned non-dict type for {repo['name']}, creating default result")
                 result = {
                     "status": "success", 
                     "analysis": {
@@ -281,11 +286,13 @@ def monitor_repository_sync(repo_id: str):
             
             monitoring_results_collection.insert_one(monitoring_result)
             
-            status_emoji = "✅" if monitoring_result["status"] == "success" else "❌"
-            print(f"{status_emoji} Completed monitoring: {repo['name']} - Status: {monitoring_result['status']}")
+            if monitoring_result["status"] == "success":
+                logger.info(f"Monitoring completed successfully: {repo['name']}")
+            else:
+                logger.warning(f"Monitoring completed with issues: {repo['name']} - Status: {monitoring_result['status']}")
             
         except Exception as e:
-            print(f"❌ Error during monitoring execution: {str(e)}")
+            logger.error(f"Error during monitoring execution for {repo['name']}: {str(e)}")
             
             error_result = {
                 "repo_id": ObjectId(repo_id),
@@ -307,7 +314,7 @@ def monitor_repository_sync(repo_id: str):
         )
         
     except Exception as e:
-        print(f"❌ Critical error monitoring repository {repo_id}: {str(e)}")
+        logger.error(f"Critical error monitoring repository {repo_id}: {str(e)}")
         
         error_result = {
             "repo_id": ObjectId(repo_id),
@@ -318,11 +325,9 @@ def monitor_repository_sync(repo_id: str):
         monitoring_results_collection.insert_one(error_result)
 
 async def monitor_repository_async(repo_id: str):
-    """Async wrapper for monitoring"""
     loop = asyncio.get_event_loop()
     await loop.run_in_executor(None, monitor_repository_sync, repo_id)
 
-# API routes
 @app.get("/")
 async def read_root():
     return {
@@ -334,7 +339,6 @@ async def read_root():
 
 @app.get("/api/health")
 async def health_check():
-    """Health check endpoint"""
     try:
         await async_db.command("ping")
         
@@ -352,20 +356,21 @@ async def health_check():
             "timestamp": datetime.now()
         }
     except Exception as e:
+        logger.error(f"Health check failed: {str(e)}")
         raise HTTPException(status_code=503, detail=f"Database connection failed: {str(e)}")
 
 @app.get("/api/repositories", response_model=List[GitHubRepo])
 async def get_repositories():
-    """Get all repositories"""
     try:
         repos = await MongoDBManager.get_all_repositories()
+        logger.info(f"Retrieved {len(repos)} repositories")
         return repos
     except Exception as e:
+        logger.error(f"Error fetching repositories: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error fetching repositories: {str(e)}")
 
 @app.post("/api/repositories", response_model=GitHubRepo)
 async def add_repository(request: AddRepoRequest, background_tasks: BackgroundTasks):
-    """Add a new repository to monitor"""
     try:
         repo_data = {
             "url": request.url,
@@ -377,52 +382,54 @@ async def add_repository(request: AddRepoRequest, background_tasks: BackgroundTa
         
         background_tasks.add_task(monitor_repository_async, str(repo.id))
         
-        print(f"➕ Added new repository: {repo.name} (ID: {repo.id})")
+        logger.info(f"Added new repository: {repo.name}")
         
         return repo
     except ValueError as e:
+        logger.warning(f"Invalid repository URL: {str(e)}")
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
+        logger.error(f"Error adding repository: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error adding repository: {str(e)}")
 
 @app.get("/api/repositories/{repo_id}", response_model=GitHubRepo)
 async def get_repository(repo_id: str):
-    """Get a specific repository"""
     repo = await MongoDBManager.get_repository(repo_id)
     if not repo:
+        logger.warning(f"Repository not found: {repo_id}")
         raise HTTPException(status_code=404, detail="Repository not found")
     return repo
 
 @app.put("/api/repositories/{repo_id}", response_model=GitHubRepo)
 async def update_repository(repo_id: str, request: UpdateRepoRequest):
-    """Update repository settings"""
     try:
         update_data = request.dict(exclude_unset=True)
         
         if 'is_active' in update_data:
             action = "activated" if update_data['is_active'] else "paused"
-            print(f"⚡ Repository {action}: {repo_id}")
+            logger.info(f"Repository {action}: {repo_id}")
         
         repo = await MongoDBManager.update_repository(repo_id, update_data)
         if not repo:
+            logger.warning(f"Repository not found for update: {repo_id}")
             raise HTTPException(status_code=404, detail="Repository not found")
         return repo
     except Exception as e:
+        logger.error(f"Error updating repository {repo_id}: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error updating repository: {str(e)}")
 
 @app.delete("/api/repositories/{repo_id}")
 async def delete_repository(repo_id: str):
-    """Delete a repository"""
     success = await MongoDBManager.delete_repository(repo_id)
     if not success:
+        logger.warning(f"Repository not found for deletion: {repo_id}")
         raise HTTPException(status_code=404, detail="Repository not found")
     
-    print(f"🗑️  Deleted repository: {repo_id}")
+    logger.info(f"Deleted repository: {repo_id}")
     return {"message": "Repository deleted successfully"}
 
 @app.get("/api/repositories/{repo_id}/results", response_model=List[MonitoringResult])
 async def get_repository_results(repo_id: str, limit: int = 50):
-    """Get monitoring results for a repository"""
     try:
         repo = await MongoDBManager.get_repository(repo_id)
         if not repo:
@@ -433,13 +440,131 @@ async def get_repository_results(repo_id: str, limit: int = 50):
     except HTTPException:
         raise
     except Exception as e:
+        logger.error(f"Error fetching results for {repo_id}: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error fetching results: {str(e)}")
+
+@app.post("/webhook")
+async def github_webhook(request: Request, background_tasks: BackgroundTasks):
+    try:
+        event_type = request.headers.get("x-github-event")
+        
+        if event_type not in ["workflow_run", "workflow_job"]:
+            logger.info(f"Ignoring unsupported event type: {event_type}")
+            return {"status": "ignored", "message": f"Event type '{event_type}' not supported"}
+        
+        content_type = request.headers.get("content-type", "")
+        logger.info(f"Webhook content-type: {content_type}")
+        
+        payload = None
+        
+        if "application/json" in content_type:
+            try:
+                payload = await request.json()
+            except Exception as e:
+                logger.error(f"JSON parsing failed: {str(e)}")
+                return {"status": "error", "message": "Invalid JSON payload"}
+                
+        elif "application/x-www-form-urlencoded" in content_type:
+            try:
+                form_data = await request.form()
+                payload_str = form_data.get("payload")
+                if payload_str:
+                    payload = json.loads(payload_str)
+                    logger.info("Successfully parsed form-urlencoded payload")
+                else:
+                    logger.warning("No payload field in form data")
+                    return {"status": "error", "message": "No payload found in form data"}
+            except Exception as e:
+                logger.error(f"Form data parsing failed: {str(e)}")
+                return {"status": "error", "message": "Invalid form data"}
+        else:
+            logger.warning(f"Unsupported content type: {content_type}")
+            return {"status": "error", "message": f"Unsupported content type: {content_type}"}
+        
+        if not payload:
+            logger.error("No payload data after parsing")
+            return {"status": "error", "message": "No payload data"}
+        
+        logger.info(f"Webhook received - Event: {event_type}")
+        
+        repository = payload.get("repository", {})
+        owner = repository.get("owner", {}).get("login", "")
+        repo_name = repository.get("name", "")
+        
+        if not owner or not repo_name:
+            logger.warning("Could not extract repository information from webhook")
+            return {"status": "error", "message": "Could not extract repository information"}
+        
+        logger.info(f"Processing webhook for repository: {owner}/{repo_name}")
+        
+        query = {
+            "owner": owner.lower(),
+            "name": repo_name.lower()
+        }
+        
+        repo = await async_db.repositories.find_one(query)
+        
+        if not repo:
+            repo = await async_db.repositories.find_one({
+                "url": {"$regex": f".*{owner}/{repo_name}", "$options": "i"}
+            })
+        
+        if not repo:
+            logger.warning(f"Repository not found in database: {owner}/{repo_name}")
+            return {"status": "ignored", "message": "Repository not configured for monitoring"}
+        
+        repo_obj = GitHubRepo(**repo)
+        
+        if not repo_obj.is_active:
+            logger.info(f"Repository monitoring is paused: {repo_obj.name}")
+            return {"status": "ignored", "message": "Repository monitoring is paused"}
+        
+        should_trigger = False
+        
+        if event_type == "workflow_run":
+            workflow_run = payload.get("workflow_run", {})
+            status = workflow_run.get("status")
+            conclusion = workflow_run.get("conclusion")
+            
+            if status == "completed":
+                should_trigger = True
+                logger.info(f"Workflow run completed - Conclusion: {conclusion}")
+        
+        elif event_type == "workflow_job":
+            workflow_job = payload.get("workflow_job", {})
+            status = workflow_job.get("status")
+            conclusion = workflow_job.get("conclusion")
+            
+            if status == "completed":
+                should_trigger = True
+                logger.info(f"Workflow job completed - Conclusion: {conclusion}")
+        
+        if should_trigger:
+            logger.info(f"Triggering monitoring agent for: {repo_obj.name}")
+            background_tasks.add_task(monitor_repository_async, str(repo_obj.id))
+            
+            return {
+                "status": "accepted",
+                "message": "Monitoring agent triggered",
+                "repository_id": str(repo_obj.id),
+                "repository_name": repo_obj.name,
+                "event_type": event_type
+            }
+        else:
+            logger.info(f"Event doesn't require monitoring: {event_type}")
+            return {
+                "status": "ignored", 
+                "message": f"Event doesn't require monitoring"
+            }
+            
+    except Exception as e:
+        logger.error(f"Webhook processing error: {str(e)}")
+        return {"status": "error", "message": f"Webhook processing error: {str(e)}"}
+
 
 @app.post("/api/repositories/{repo_id}/monitor")
 async def trigger_monitoring(repo_id: str, background_tasks: BackgroundTasks):
-    """Trigger immediate monitoring for a repository"""
     try:
-        # Verify repository exists and is active
         repo = await MongoDBManager.get_repository(repo_id)
         if not repo:
             raise HTTPException(status_code=404, detail="Repository not found")
@@ -447,20 +572,19 @@ async def trigger_monitoring(repo_id: str, background_tasks: BackgroundTasks):
         if not repo.is_active:
             raise HTTPException(status_code=400, detail="Cannot monitor paused repository. Please resume monitoring first.")
         
-        print(f"🎯 Manual monitoring triggered for: {repo.name} (ID: {repo_id})")
+        logger.info(f"Manual monitoring triggered for: {repo.name}")
         background_tasks.add_task(monitor_repository_async, repo_id)
         return {"message": "Monitoring triggered successfully"}
     except HTTPException:
         raise
     except Exception as e:
+        logger.error(f"Error triggering monitoring for {repo_id}: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error triggering monitoring: {str(e)}")
 
 @app.get("/api/monitoring/results", response_model=List[MonitoringResult])
 async def get_all_monitoring_results(limit: int = 100, repo_id: Optional[str] = None):
-    """Get all monitoring results with optional filtering"""
     try:
         if repo_id:
-            # Verify repository exists
             repo = await MongoDBManager.get_repository(repo_id)
             if not repo:
                 raise HTTPException(status_code=404, detail="Repository not found")
@@ -471,20 +595,20 @@ async def get_all_monitoring_results(limit: int = 100, repo_id: Optional[str] = 
     except HTTPException:
         raise
     except Exception as e:
+        logger.error(f"Error fetching monitoring results: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error fetching monitoring results: {str(e)}")
 
 @app.get("/api/stats")
 async def get_stats():
-    """Get overall statistics"""
     try:
         stats = await MongoDBManager.get_stats()
         return stats
     except Exception as e:
+        logger.error(f"Error fetching stats: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error fetching stats: {str(e)}")
 
 @app.get("/api/repositories/{repo_id}/status")
 async def get_repository_status(repo_id: str):
-    """Get repository monitoring status"""
     try:
         repo = await MongoDBManager.get_repository(repo_id)
         if not repo:
@@ -502,7 +626,9 @@ async def get_repository_status(repo_id: str):
             "created_at": repo.created_at
         }
     except Exception as e:
+        logger.error(f"Error getting repository status for {repo_id}: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error getting repository status: {str(e)}")
+
 if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == "cli":
         if len(sys.argv) < 3:

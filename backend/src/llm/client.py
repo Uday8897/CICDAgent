@@ -13,7 +13,6 @@ class LLMClient:
         )
     
     def analyze_failure(self, logs: str) -> dict:
-        # If logs contain error messages about fetching, handle them
         if "Error fetching logs" in logs or "Failed to fetch logs" in logs:
             return {
                 "root_cause": "Logs unavailable - authentication or API issue",
@@ -44,7 +43,6 @@ class LLMClient:
         
         try:
             content = response.content.strip()
-            # Extract JSON from response
             json_match = re.search(r'\{.*\}', content, re.DOTALL)
             if json_match:
                 return json.loads(json_match.group())
