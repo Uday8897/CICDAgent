@@ -1,0 +1,202 @@
+2025-10-30 09:18:55,281 - ERROR - JSON decode error in webhook: Expecting value: line 1 column 1 (char 0)
+2025-10-30 09:18:55,831 - ERROR - JSON decode error in webhook: Expecting value: line 1 column 1 (char 0)
+2025-10-30 09:18:57,611 - ERROR - JSON decode error in webhook: Expecting value: line 1 column 1 (char 0)
+2025-10-30 09:18:57,620 - ERROR - JSON decode error in webhook: Expecting value: line 1 column 1 (char 0)
+2025-10-30 09:19:18,427 - ERROR - JSON decode error in webhook: Expecting value: line 1 column 1 (char 0)
+2025-10-30 09:19:18,494 - ERROR - JSON decode error in webhook: Expecting value: line 1 column 1 (char 0)
+2025-10-30 09:19:20,585 - ERROR - JSON decode error in webhook: Expecting value: line 1 column 1 (char 0)
+2025-10-30 09:19:20,760 - ERROR - JSON decode error in webhook: Expecting value: line 1 column 1 (char 0)
+2025-10-30 09:19:35,998 - ERROR - JSON decode error in webhook: Expecting value: line 1 column 1 (char 0)
+2025-10-30 09:19:36,002 - ERROR - JSON decode error in webhook: Expecting value: line 1 column 1 (char 0)
+2025-10-30 09:19:38,235 - ERROR - JSON decode error in webhook: Expecting value: line 1 column 1 (char 0)
+2025-10-30 09:19:38,567 - ERROR - JSON decode error in webhook: Expecting value: line 1 column 1 (char 0)
+2025-10-30 09:19:44,807 - ERROR - JSON decode error in webhook: Expecting value: line 1 column 1 (char 0)
+2025-10-30 09:19:44,966 - ERROR - JSON decode error in webhook: Expecting value: line 1 column 1 (char 0)
+2025-10-30 09:22:06,408 - INFO - Webhook content-type: application/x-www-form-urlencoded
+2025-10-30 09:22:06,412 - INFO - Successfully parsed form-urlencoded payload
+2025-10-30 09:22:06,412 - INFO - Webhook received - Event: workflow_run
+2025-10-30 09:22:06,412 - INFO - Processing webhook for repository: Uday8897/CI-CD
+2025-10-30 09:22:06,434 - INFO - Webhook content-type: application/x-www-form-urlencoded
+2025-10-30 09:22:06,436 - INFO - Successfully parsed form-urlencoded payload
+2025-10-30 09:22:06,437 - INFO - Webhook received - Event: workflow_job
+2025-10-30 09:22:06,438 - INFO - Processing webhook for repository: Uday8897/CI-CD
+2025-10-30 09:22:06,439 - INFO - Event doesn't require monitoring: workflow_run
+2025-10-30 09:22:06,442 - INFO - Event doesn't require monitoring: workflow_job
+2025-10-30 09:22:08,996 - INFO - Webhook content-type: application/x-www-form-urlencoded
+2025-10-30 09:22:08,998 - INFO - Successfully parsed form-urlencoded payload
+2025-10-30 09:22:08,998 - INFO - Webhook received - Event: workflow_run
+2025-10-30 09:22:08,999 - INFO - Processing webhook for repository: Uday8897/CI-CD
+2025-10-30 09:22:09,003 - INFO - Webhook content-type: application/x-www-form-urlencoded
+2025-10-30 09:22:09,005 - INFO - Successfully parsed form-urlencoded payload
+2025-10-30 09:22:09,005 - INFO - Webhook received - Event: workflow_job
+2025-10-30 09:22:09,006 - INFO - Processing webhook for repository: Uday8897/CI-CD
+2025-10-30 09:22:09,007 - INFO - Event doesn't require monitoring: workflow_run
+2025-10-30 09:22:09,013 - INFO - Event doesn't require monitoring: workflow_job
+2025-10-30 09:22:27,503 - INFO - Webhook content-type: application/x-www-form-urlencoded
+2025-10-30 09:22:27,504 - INFO - Successfully parsed form-urlencoded payload
+2025-10-30 09:22:27,505 - INFO - Webhook received - Event: workflow_job
+2025-10-30 09:22:27,505 - INFO - Processing webhook for repository: Uday8897/CI-CD
+2025-10-30 09:22:27,509 - INFO - Event doesn't require monitoring: workflow_job
+2025-10-30 09:22:28,130 - INFO - Webhook content-type: application/x-www-form-urlencoded
+2025-10-30 09:22:28,132 - INFO - Successfully parsed form-urlencoded payload
+2025-10-30 09:22:28,132 - INFO - Webhook received - Event: workflow_job
+2025-10-30 09:22:28,133 - INFO - Processing webhook for repository: Uday8897/CI-CD
+2025-10-30 09:22:28,136 - INFO - Workflow job completed - Conclusion: success
+2025-10-30 09:22:28,137 - INFO - Triggering monitoring agent for: CI-CD
+2025-10-30 09:22:28,140 - INFO - Starting monitoring for repository: CI-CD
+2025-10-30 09:22:31,328 - INFO - Webhook content-type: application/x-www-form-urlencoded
+2025-10-30 09:22:31,330 - INFO - Successfully parsed form-urlencoded payload
+2025-10-30 09:22:31,330 - INFO - Webhook received - Event: workflow_run
+2025-10-30 09:22:31,331 - INFO - Processing webhook for repository: Uday8897/CI-CD
+2025-10-30 09:22:31,334 - INFO - Event doesn't require monitoring: workflow_run
+2025-10-30 09:22:31,683 - INFO - Webhook content-type: application/x-www-form-urlencoded
+2025-10-30 09:22:31,686 - INFO - Successfully parsed form-urlencoded payload
+2025-10-30 09:22:31,686 - INFO - Webhook received - Event: workflow_job
+2025-10-30 09:22:31,687 - INFO - Processing webhook for repository: Uday8897/CI-CD
+2025-10-30 09:22:31,690 - INFO - Agent execution completed for CI-CD
+2025-10-30 09:22:31,691 - INFO - Monitoring completed successfully: CI-CD
+2025-10-30 09:22:31,693 - INFO - Event doesn't require monitoring: workflow_job
+2025-10-30 09:22:54,544 - INFO - Webhook content-type: application/x-www-form-urlencoded
+2025-10-30 09:22:54,546 - INFO - Successfully parsed form-urlencoded payload
+2025-10-30 09:22:54,547 - INFO - Webhook received - Event: workflow_job
+2025-10-30 09:22:54,547 - INFO - Processing webhook for repository: Uday8897/CI-CD
+2025-10-30 09:22:54,552 - INFO - Event doesn't require monitoring: workflow_job
+2025-10-30 09:22:55,013 - INFO - Webhook content-type: application/x-www-form-urlencoded
+2025-10-30 09:22:55,015 - INFO - Successfully parsed form-urlencoded payload
+2025-10-30 09:22:55,016 - INFO - Webhook received - Event: workflow_job
+2025-10-30 09:22:55,016 - INFO - Processing webhook for repository: Uday8897/CI-CD
+2025-10-30 09:22:55,020 - INFO - Workflow job completed - Conclusion: success
+2025-10-30 09:22:55,021 - INFO - Triggering monitoring agent for: CI-CD
+2025-10-30 09:22:55,024 - INFO - Starting monitoring for repository: CI-CD
+2025-10-30 09:22:59,802 - INFO - Webhook content-type: application/x-www-form-urlencoded
+2025-10-30 09:22:59,803 - INFO - Successfully parsed form-urlencoded payload
+2025-10-30 09:22:59,804 - INFO - Webhook received - Event: workflow_job
+2025-10-30 09:22:59,804 - INFO - Processing webhook for repository: Uday8897/CI-CD
+2025-10-30 09:22:59,805 - INFO - Webhook content-type: application/x-www-form-urlencoded
+2025-10-30 09:22:59,808 - INFO - Successfully parsed form-urlencoded payload
+2025-10-30 09:22:59,809 - INFO - Webhook received - Event: workflow_run
+2025-10-30 09:22:59,809 - INFO - Processing webhook for repository: Uday8897/CI-CD
+2025-10-30 09:22:59,818 - INFO - Event doesn't require monitoring: workflow_job
+2025-10-30 09:22:59,823 - INFO - Event doesn't require monitoring: workflow_run
+2025-10-30 09:23:02,103 - INFO - Agent execution completed for CI-CD
+2025-10-30 09:23:02,105 - INFO - Monitoring completed successfully: CI-CD
+2025-10-30 09:23:02,603 - INFO - Webhook content-type: application/x-www-form-urlencoded
+2025-10-30 09:23:02,605 - INFO - Successfully parsed form-urlencoded payload
+2025-10-30 09:23:02,605 - INFO - Webhook received - Event: workflow_job
+2025-10-30 09:23:02,606 - INFO - Processing webhook for repository: Uday8897/CI-CD
+2025-10-30 09:23:02,610 - INFO - Workflow job completed - Conclusion: success
+2025-10-30 09:23:02,611 - INFO - Triggering monitoring agent for: CI-CD
+2025-10-30 09:23:02,615 - INFO - Starting monitoring for repository: CI-CD
+2025-10-30 09:23:03,307 - INFO - Webhook content-type: application/x-www-form-urlencoded
+2025-10-30 09:23:03,309 - INFO - Successfully parsed form-urlencoded payload
+2025-10-30 09:23:03,309 - INFO - Webhook received - Event: workflow_run
+2025-10-30 09:23:03,310 - INFO - Processing webhook for repository: Uday8897/CI-CD
+2025-10-30 09:23:03,313 - INFO - Workflow run completed - Conclusion: success
+2025-10-30 09:23:03,314 - INFO - Triggering monitoring agent for: CI-CD
+2025-10-30 09:23:03,317 - INFO - Starting monitoring for repository: CI-CD
+2025-10-30 09:23:07,048 - INFO - Agent execution completed for CI-CD
+2025-10-30 09:23:07,050 - INFO - Monitoring completed successfully: CI-CD
+2025-10-30 09:23:08,923 - INFO - Agent execution completed for CI-CD
+2025-10-30 09:23:08,925 - INFO - Monitoring completed successfully: CI-CD
+2025-10-30 09:23:43,706 - INFO - Webhook content-type: application/x-www-form-urlencoded
+2025-10-30 09:23:43,707 - INFO - Successfully parsed form-urlencoded payload
+2025-10-30 09:23:43,708 - INFO - Webhook received - Event: workflow_run
+2025-10-30 09:23:43,708 - INFO - Processing webhook for repository: Uday8897/CI-CD
+2025-10-30 09:23:43,713 - INFO - Event doesn't require monitoring: workflow_run
+2025-10-30 09:23:46,745 - INFO - Webhook content-type: application/x-www-form-urlencoded
+2025-10-30 09:23:46,821 - INFO - Successfully parsed form-urlencoded payload
+2025-10-30 09:23:46,821 - INFO - Webhook received - Event: workflow_run
+2025-10-30 09:23:46,822 - INFO - Processing webhook for repository: Uday8897/CI-CD
+2025-10-30 09:23:46,825 - INFO - Event doesn't require monitoring: workflow_run
+2025-10-30 09:24:03,434 - INFO - Webhook content-type: application/x-www-form-urlencoded
+2025-10-30 09:24:03,436 - INFO - Successfully parsed form-urlencoded payload
+2025-10-30 09:24:03,436 - INFO - Webhook received - Event: workflow_run
+2025-10-30 09:24:03,436 - INFO - Processing webhook for repository: Uday8897/CI-CD
+2025-10-30 09:24:03,440 - INFO - Event doesn't require monitoring: workflow_run
+2025-10-30 09:24:46,843 - INFO - Webhook content-type: application/x-www-form-urlencoded
+2025-10-30 09:24:46,846 - INFO - Successfully parsed form-urlencoded payload
+2025-10-30 09:24:46,847 - INFO - Webhook received - Event: workflow_run
+2025-10-30 09:24:46,847 - INFO - Processing webhook for repository: Uday8897/CI-CD
+2025-10-30 09:24:46,851 - INFO - Event doesn't require monitoring: workflow_run
+2025-10-30 09:24:51,215 - INFO - Webhook content-type: application/x-www-form-urlencoded
+2025-10-30 09:24:51,217 - INFO - Successfully parsed form-urlencoded payload
+2025-10-30 09:24:51,217 - INFO - Webhook received - Event: workflow_run
+2025-10-30 09:24:51,218 - INFO - Processing webhook for repository: Uday8897/CI-CD
+2025-10-30 09:24:51,222 - INFO - Workflow run completed - Conclusion: success
+2025-10-30 09:24:51,223 - INFO - Triggering monitoring agent for: CI-CD
+2025-10-30 09:24:51,225 - INFO - Starting monitoring for repository: CI-CD
+2025-10-30 09:25:23,881 - INFO - Agent execution completed for CI-CD
+2025-10-30 09:25:23,882 - ERROR - Error during monitoring execution for CI-CD: 'NoneType' object has no attribute 'get'
+2025-10-30 09:42:11,447 - INFO - Retrieved 1 repositories
+2025-10-30 09:42:11,459 - INFO - Retrieved 1 repositories
+2025-10-30 09:42:44,469 - INFO - Retrieved 1 repositories
+2025-10-30 09:42:44,477 - INFO - Retrieved 1 repositories
+2025-10-30 09:42:48,219 - INFO - Manual monitoring triggered for: CI-CD
+2025-10-30 09:42:48,223 - INFO - Starting monitoring for repository: CI-CD
+2025-10-30 09:42:49,899 - INFO - Starting monitoring agent for https://github.com/Uday8897/CI-CD
+2025-10-30 09:42:52,589 - INFO - Health check result for Uday8897/CI-CD: {'status': 'success'}
+2025-10-30 09:42:52,589 - INFO - No failures detected - marking as success
+2025-10-30 09:42:52,591 - INFO - Marking monitoring as successful
+2025-10-30 09:42:52,593 - INFO - Agent completed successfully
+2025-10-30 09:42:52,593 - INFO - Final status: success
+2025-10-30 09:42:52,594 - INFO - Agent execution completed for CI-CD
+2025-10-30 09:42:52,597 - INFO - Monitoring completed successfully: CI-CD
+2025-10-30 09:43:55,840 - INFO - Retrieved 1 repositories
+2025-10-30 09:43:55,846 - INFO - Retrieved 1 repositories
+2025-10-30 09:44:16,739 - INFO - Manual monitoring triggered for: CI-CD
+2025-10-30 09:44:16,742 - INFO - Starting monitoring for repository: CI-CD
+2025-10-30 09:44:18,466 - INFO - Starting monitoring agent for https://github.com/Uday8897/CI-CD
+2025-10-30 09:44:23,277 - INFO - Health check result for Uday8897/CI-CD: {'status': 'failure', 'run_id': 18929653415, 'job_id': 54043956262, 'run_created_at': '2025-10-30T04:13:46Z'}
+2025-10-30 09:44:23,277 - WARNING - Failure detected in run 18929653415
+2025-10-30 09:44:23,279 - INFO - Fetching logs for job 54043956262
+2025-10-30 09:44:26,779 - INFO - Retrieved 14114 characters of logs
+2025-10-30 09:44:26,780 - INFO - Analyzing failure with LLM
+2025-10-30 09:44:28,166 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-10-30 09:44:28,199 - INFO - Analysis complete: The Maven compiler plugin is configured to compile with Java 21 (via the `--release 21` flag), but the workflow installs and uses Java 17 (Temurin JDK 17.0.16). This version mismatch causes the compiler to fail with "release version 21 not supported".
+2025-10-30 09:44:28,201 - INFO - Getting original workflow file for run 18929653415
+2025-10-30 09:44:31,289 - INFO - Workflow file: .github/workflows/maven.yml
+2025-10-30 09:44:31,291 - INFO - Generating fix with LLM
+2025-10-30 09:44:32,643 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-10-30 09:44:32,645 - INFO - Fix generated successfully
+2025-10-30 09:44:32,647 - INFO - Committing fix to .github/workflows/maven.yml
+2025-10-30 09:44:35,385 - INFO - Fix committed with SHA: 5eab630a6772c225831ab1b18ab7fb89e6ce3d9a
+2025-10-30 09:44:35,386 - INFO - Agent completed successfully
+2025-10-30 09:44:35,386 - INFO - Final status: failure
+2025-10-30 09:44:35,386 - INFO - Agent execution completed for CI-CD
+2025-10-30 09:44:35,390 - WARNING - Monitoring completed with issues: CI-CD - Status: failure
+2025-10-30 09:49:13,178 - INFO - Ignoring unsupported event type: ping
+2025-10-30 09:49:41,584 - INFO - Webhook content-type: application/x-www-form-urlencoded
+2025-10-30 09:49:41,594 - INFO - Successfully parsed form-urlencoded payload
+2025-10-30 09:49:41,595 - INFO - Webhook received - Event: workflow_run
+2025-10-30 09:49:41,595 - INFO - Processing webhook for repository: Uday8897/CI-CD
+2025-10-30 09:49:41,614 - INFO - Event doesn't require monitoring: workflow_run
+2025-10-30 09:49:45,721 - INFO - Webhook content-type: application/x-www-form-urlencoded
+2025-10-30 09:49:45,726 - INFO - Successfully parsed form-urlencoded payload
+2025-10-30 09:49:45,727 - INFO - Webhook received - Event: workflow_run
+2025-10-30 09:49:45,727 - INFO - Processing webhook for repository: Uday8897/CI-CD
+2025-10-30 09:49:45,732 - INFO - Event doesn't require monitoring: workflow_run
+2025-10-30 09:50:05,500 - INFO - Webhook content-type: application/x-www-form-urlencoded
+2025-10-30 09:50:05,501 - INFO - Successfully parsed form-urlencoded payload
+2025-10-30 09:50:05,502 - INFO - Webhook received - Event: workflow_run
+2025-10-30 09:50:05,502 - INFO - Processing webhook for repository: Uday8897/CI-CD
+2025-10-30 09:50:05,506 - INFO - Event doesn't require monitoring: workflow_run
+2025-10-30 09:50:25,642 - INFO - Webhook content-type: application/x-www-form-urlencoded
+2025-10-30 09:50:25,728 - INFO - Successfully parsed form-urlencoded payload
+2025-10-30 09:50:25,729 - INFO - Webhook received - Event: workflow_run
+2025-10-30 09:50:25,729 - INFO - Processing webhook for repository: Uday8897/CI-CD
+2025-10-30 09:50:25,733 - INFO - Event doesn't require monitoring: workflow_run
+2025-10-30 09:50:30,915 - INFO - Webhook content-type: application/x-www-form-urlencoded
+2025-10-30 09:50:30,919 - INFO - Successfully parsed form-urlencoded payload
+2025-10-30 09:50:30,919 - INFO - Webhook received - Event: workflow_run
+2025-10-30 09:50:30,919 - INFO - Processing webhook for repository: Uday8897/CI-CD
+2025-10-30 09:50:30,924 - INFO - Workflow run completed - Conclusion: success
+2025-10-30 09:50:30,925 - INFO - Triggering monitoring agent for: CI-CD
+2025-10-30 09:50:30,929 - INFO - Starting monitoring for repository: CI-CD
+2025-10-30 09:50:31,784 - INFO - Starting monitoring agent for https://github.com/Uday8897/CI-CD
+2025-10-30 09:50:34,597 - INFO - Health check result for Uday8897/CI-CD: {'status': 'success'}
+2025-10-30 09:50:34,597 - INFO - No failures detected - marking as success
+2025-10-30 09:50:34,598 - INFO - Marking monitoring as successful
+2025-10-30 09:50:34,599 - INFO - Agent completed successfully
+2025-10-30 09:50:34,599 - INFO - Final status: success
+2025-10-30 09:50:34,599 - INFO - Agent execution completed for CI-CD
+2025-10-30 09:50:34,601 - INFO - Monitoring completed successfully: CI-CD
